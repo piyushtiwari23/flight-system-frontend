@@ -1,10 +1,9 @@
 import React, {useState, useEffect} from 'react'
 import API from '../api'
 import {useNavigate} from 'react-router-dom'
-import logout from './Logout'
 import '../styles/dashboard.css'
 
-function UserDashboard(){
+function UserDashboard({ onLogout }){
     const[flights,setFlights] = useState([])
     const navigate = useNavigate();
 
@@ -21,11 +20,16 @@ function UserDashboard(){
         fetchFlights()
     }, [])
 
+    const handleLogout = () => {
+        onLogout();
+        navigate('/');
+    };
+
     return(
         <div className="user-dashboard">
             <div className="dashboard-header">
                 <h2>Flight Booking Dashboard</h2>
-                <button className="logout-btn" onClick={()=> logout(navigate)}>Logout</button>
+                <button className="logout-btn" onClick={handleLogout}>Logout</button>
             </div>
 
             <div className="flights-section">
@@ -35,7 +39,7 @@ function UserDashboard(){
                         <div key={flight._id} className="flight-card">
                             <div className="flight-logo">
                                 <img
-                                    src={`http://localhost:5001/uploads/${flight.logo}`}
+                                    src={`http://localhost:1221/uploads/${flight.logo}`}
                                     alt="airline logo"
                                     onError={(e) => {
                                         e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iODAiIGhlaWdodD0iODAiIHZpZXdCb3g9IjAgMCA4MCA4MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjgwIiBoZWlnaHQ9IjgwIiBmaWxsPSIjRjNGNEY2Ii8+CjxwYXRoIGQ9Ik00MCA0OEM0NC40MTgzIDQ4IDQ4IDQ0LjQxODMgNDggNDBDNDggMzUuNTgxNyA0NC40MTgzIDMyIDQwIDMyQzM1LjU4MTcgMzIgMzIgMzUuNTgxNyAzMiA0MEMzMiA0NC40MTgzIDM1LjU4MTcgNDggNDAgNDhaIiBmaWxsPSIjOUNBM0FGIi8+CjxwYXRoIGQ9Ik00MCA1NkMzNS41ODE3IDU2IDMyIDUyLjQxODMgMzIgNDhDMzIgNDMuNTgxNyAzNS41ODE3IDQwIDQwIDQwQzQ0LjQxODMgNDAgNDggNDMuNTgxNyA0OCA0OEM0OCA1Mi40MTgzIDQ0LjQxODMgNTYgNDAgNTZaIiBmaWxsPSIjOUNBM0FGIi8+Cjwvc3ZnPgo=';

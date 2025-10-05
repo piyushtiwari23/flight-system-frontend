@@ -1,10 +1,9 @@
 import React, {useState,useEffect} from 'react'
 import API from '../api'
 import {useNavigate} from 'react-router-dom'
-import logout from './Logout'
 import '../styles/dashboard.css'
 
-function AdminPanel(){
+function AdminPanel({ onLogout }){
 
     const[form,setForm] = useState({flightNumber:'', departure:'', arrival:'', time:''})
     const[logo,setLogo] = useState(null)
@@ -54,7 +53,7 @@ function AdminPanel(){
             time: flight.time
         })
         setEditing(flight._id)
-        setLogoPreview(`http://localhost:5001/uploads/${flight.logo}`)
+        setLogoPreview(`http://localhost:1221/uploads/${flight.logo}`)
     }
 
     const handleDelete = async (id) =>{
@@ -62,11 +61,16 @@ function AdminPanel(){
         fetchFlights()
     }
 
+    const handleLogout = () => {
+        onLogout();
+        navigate('/');
+    };
+
     return(
         <div className="dashboard-container">
             <div className="dashboard-header">
                 <h2 className="dashboard-title">Admin Panel</h2>
-                <button className="logout-btn" onClick={()=> logout(navigate)}>Logout</button>
+                <button className="logout-btn" onClick={handleLogout}>Logout</button>
             </div>
 
             <div className="admin-panel">
@@ -103,7 +107,7 @@ function AdminPanel(){
                         <div key={flight._id} className="flight-item">
                             <div className="flight-logo">
                                 <img
-                                    src={`http://localhost:5001/uploads/${flight.logo}`}
+                                    src={`http://localhost:1221/uploads/${flight.logo}`}
                                     width="50"
                                     alt="logo"
                                     onError={(e) => {

@@ -1,13 +1,12 @@
 import React, {useState} from 'react'
 import API from '../api'
-import {useNavigate, Link} from 'react-router-dom'
+import {Link} from 'react-router-dom'
 import '../styles/auth.css'
 
-function LoginPage(){
+function LoginPage({ onLogin }){
     const[form,setForm] = useState({email:'', password:''})
     const[loading, setLoading] = useState(false)
     const[error, setError] = useState('')
-    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setForm({...form, [e.target.name] : e.target.value})
@@ -21,9 +20,7 @@ function LoginPage(){
 
         try{
             const res = await API.post('/auth/login', form)
-            localStorage.setItem('token', res.data.token)
-            localStorage.setItem('role', res.data.role)
-            navigate(res.data.role === 'admin' ? '/admin' : '/user')
+            onLogin(res.data.token, res.data.role)
         }
         catch(err){
             console.error('Login error:', err)
